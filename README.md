@@ -12,6 +12,12 @@ esys_flutter_share:
 ```
 
 ## Usage
+Import:
+
+```dart
+import 'package:esys_flutter_share/esys_flutter_share.dart';
+```
+
 Share an image:
 
 ```dart
