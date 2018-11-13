@@ -1,10 +1,20 @@
 # esys_flutter_share
 
-A new flutter plugin project.
+A flutter plugin (iOS & Android) for sharing images with other applications.
 
-## Getting Started
+## Installation
+Add the following lines to the dependencies in the pubspec.yaml file:
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+```yaml
+esys_flutter_share:
+     git:
+       url: git@github.com:esysberlin/esys-flutter-share.git
+```
 
-For help on editing plugin code, view the [documentation](https://flutter.io/developing-packages/#edit-plugin-package).
+## Usage
+Share an image:
+
+```dart
+final ByteData bytes = await rootBundle.load('assets/image.png');
+EsysFlutterShare.shareImage('myImageTest.png', 'myTitle', bytes);
+```
