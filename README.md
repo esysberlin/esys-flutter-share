@@ -8,7 +8,7 @@ Add the following lines to the dependencies in the pubspec.yaml file:
 ```yaml
 esys_flutter_share:
      git:
-       url: git@github.com:esysberlin/esys-flutter-share.git
+       url: https://github.com/esysberlin/esys-flutter-share.git
 ```
 
 ## Usage
