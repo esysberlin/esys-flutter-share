@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 MaterialButton(
                   child: Text('Share text'),
-                  onPressed: () async => _shareText(),
+                  onPressed: () async => await _shareText(),
                 ),
                 MaterialButton(
                   child: Text('Share image'),
