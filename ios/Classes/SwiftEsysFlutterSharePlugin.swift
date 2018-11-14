@@ -19,14 +19,14 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
       let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
 
       let argsMap = arguments as! NSDictionary
-      let name:String = argsMap.value(forKey: "name") as! String
+      let fileName:String = argsMap.value(forKey: "fileName") as! String
         
       // no use in ios
       //let title:String = argsMap.value(forKey: "title") as! String
         
       let docsPath:String = NSSearchPathForDirectoriesInDomains(.cachesDirectory,.userDomainMask , true).first!;
         
-      let imagePath = NSURL(fileURLWithPath: docsPath).appendingPathComponent(name)
+      let imagePath = NSURL(fileURLWithPath: docsPath).appendingPathComponent(fileName)
         
       var imageData:NSData? = nil;
         

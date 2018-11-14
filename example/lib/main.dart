@@ -27,22 +27,34 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(20.0),
           child: ListView(
             children: <Widget>[
-              Center(
-                child: MaterialButton(
-                  child: Text('Share image'),
-                  onPressed: _shareImage,
-                ),
+              MaterialButton(
+                child: Text('Share text'),
+                onPressed: _shareText,
+              ),
+              MaterialButton(
+                child: Text('Share image'),
+                onPressed: _shareImage,
               ),
             ],
           ),
         ));
   }
 
+  _shareText() async {
+    try {
+      EsysFlutterShare.shareText(
+          'This is my text to share with other applications.',
+          droidTitle: 'my text title');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
   _shareImage() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/image.png');
-      // title just for android, not supported in ios
-      EsysFlutterShare.shareImage('myImageTest.png', 'myTitle', bytes);
+      EsysFlutterShare.shareImage('myImageTest.png', bytes,
+          droidTitle: 'my image title');
     } catch (e) {
       print('error: $e');
     }
