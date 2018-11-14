@@ -24,25 +24,24 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text('Esys Share Plugin Sample'),
         ),
         body: Container(
-          padding: const EdgeInsets.all(20.0),
-          child: ListView(
-            children: <Widget>[
-              MaterialButton(
-                child: Text('Share text'),
-                onPressed: _shareText,
-              ),
-              MaterialButton(
-                child: Text('Share image'),
-                onPressed: _shareImage,
-              ),
-            ],
-          ),
-        ));
+            padding: const EdgeInsets.all(20.0),
+            child: ListView(
+              children: <Widget>[
+                MaterialButton(
+                  child: Text('Share text'),
+                  onPressed: () async => _shareText(),
+                ),
+                MaterialButton(
+                  child: Text('Share image'),
+                  onPressed: () async => await _shareImage(),
+                ),
+              ],
+            )));
   }
 
-  _shareText() async {
+  Future _shareText() async {
     try {
-      EsysFlutterShare.shareText(
+      await EsysFlutterShare.shareText(
           'This is my text to share with other applications.',
           droidTitle: 'my text title');
     } catch (e) {
@@ -50,10 +49,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  _shareImage() async {
+  Future _shareImage() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/image.png');
-      EsysFlutterShare.shareImage('myImageTest.png', bytes,
+      await EsysFlutterShare.shareImage('myImageTest.png', bytes,
           droidTitle: 'my image title');
     } catch (e) {
       print('error: $e');

@@ -46,21 +46,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         }
     }
 
-    private void shareText(Object arguments) {
-
-        HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
-        String textToSend = (String) argsMap.get("text");
-        String title = (String) argsMap.get("title");
-
-        Context activeContext = _registrar.activeContext();
-
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
-        activeContext.startActivity(Intent.createChooser(shareIntent, title));
-    }
-
-    private void shareImage(Object arguments) {
+     private void shareImage(Object arguments) {
 
         HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
         String fileName = (String) argsMap.get("fileName");
@@ -73,6 +59,20 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        activeContext.startActivity(Intent.createChooser(shareIntent, title));
+    }
+
+    private void shareText(Object arguments) {
+
+        HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
+        String textToSend = (String) argsMap.get("text");
+        String title = (String) argsMap.get("title");
+
+        Context activeContext = _registrar.activeContext();
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
     }
 }
