@@ -20,13 +20,13 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
     func shareText(arguments:Any?) -> Void {
         // prepare method channel args
         let argsMap = arguments as! NSDictionary
-        let text:String = argsMap.value(forKey: "text") as! String
+        let textToSend:String = argsMap.value(forKey: "text") as! String
         
         // no use in ios
         //let title:String = argsMap.value(forKey: "title") as! String
         
         // set up activity view controller
-        let activityViewController = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        let activityViewController = UIActivityViewController(activityItems: [textToSend], applicationActivities: nil)
         
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
