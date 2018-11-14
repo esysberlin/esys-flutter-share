@@ -4,7 +4,7 @@
     <application>
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="github.com/orgs/esysberlin/esys-flutter-share/fileprovider"
+            android:authorities="${applicationId}.github.com/orgs/esysberlin/esys-flutter-share/fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
