@@ -42,8 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future _shareText() async {
     try {
       await EsysFlutterShare.shareText(
-          'This is my text to share with other applications.',
-          droidTitle: 'my text title');
+          'This is my text to share with other applications.', 'my text title');
     } catch (e) {
       print('error: $e');
     }
@@ -52,8 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future _shareImage() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/image.png');
-      await EsysFlutterShare.shareImage('myImageTest.png', bytes,
-          droidTitle: 'my image title');
+      await EsysFlutterShare.shareImage(
+          'myImageTest.png', bytes, 'my image title');
     } catch (e) {
       print('error: $e');
     }
