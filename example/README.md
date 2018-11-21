@@ -1,5 +1,5 @@
 ```dart
-// Copyright 2018 the Charts project authors. Please see the AUTHORS file
+// Copyright 2018 the esys_flutter_share project authors. Please see the AUTHORS file
 // for details.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
