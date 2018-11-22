@@ -2,8 +2,7 @@ name: esys_flutter_share
 description: A Flutter plugin for sharing images & text with other applications.
 version: 0.0.3
 author: ESYS GmbH <info@esys.de>
-homepage: https://www.esys.eu
-Repository (GitHub): https://github.com/esysberlin/esys-flutter-share
+homepage: https://github.com/esysberlin/esys-flutter-share
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
