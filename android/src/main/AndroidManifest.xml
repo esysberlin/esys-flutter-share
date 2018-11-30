@@ -1,15 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="de.esys.esysfluttershare">
-    
+
     <application>
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="de.esys.esysfluttershare.EsysFlutterShareFileProvider"
             android:authorities="${applicationId}.fileprovider.github.com/orgs/esysberlin/esys-flutter-share"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
+                android:resource="@xml/esys_flutter_share_filepaths" />
         </provider>
     </application>
 </manifest>
