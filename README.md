@@ -25,9 +25,4 @@ await EsysFlutterShare.shareImage('myImageTest.png', bytes, 'my image title');
 
 Check out the example app in the Repository for further information.
 
-## License
-
-This package is licensed under the Apache 2 license, see the
-[LICENSE](LICENSE) and [AUTHORS](AUTHORS) files for details.
-
 
