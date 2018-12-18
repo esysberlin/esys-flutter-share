@@ -38,6 +38,8 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
+        activityViewController.popoverPresentationController?.sourceView = controller.view
+
         controller.show(activityViewController, sender: self)
     }
     
@@ -54,6 +56,8 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
+        activityViewController.popoverPresentationController?.sourceView = controller.view
+        
         controller.show(activityViewController, sender: self)
     }
     
