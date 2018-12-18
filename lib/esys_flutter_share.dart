@@ -11,7 +11,7 @@ class EsysFlutterShare {
 
   /// Shares text with other supported applications on Android and iOS.
   /// The title parameter is just supported on Android and does nothing on iOS.
-  static Future shareText(String text, String droidTitle) async {
+  static Future shareText(String droidTitle, String text) async {
     Map argsMap = <String, String>{'text': '$text', 'title': '$droidTitle'};
     _channel.invokeMethod('shareText', argsMap);
   }
@@ -19,10 +19,11 @@ class EsysFlutterShare {
   /// Shares images with other supported applications on Android and iOS.
   /// The title parameter is just supported on Android and does nothing on iOS.
   static Future shareImage(
-      String fileName, ByteData imageBytes, String droidTitle) async {
+      String fileName, ByteData imageBytes, String droidTitle, String text) async {
     Map argsMap = <String, String>{
       'fileName': '$fileName',
-      'title': '$droidTitle'
+      'title': '$droidTitle',
+      'text': '$text'
     };
 
     final Uint8List list = imageBytes.buffer.asUint8List();

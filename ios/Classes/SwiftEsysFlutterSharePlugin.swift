@@ -23,7 +23,8 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         // prepare method channel args
         let argsMap = arguments as! NSDictionary
         let fileName:String = argsMap.value(forKey: "fileName") as! String
-        
+        let text:String = argsMap.value(forKey: "text") as! String
+
         // no use in ios
         //let title:String = argsMap.value(forKey: "title") as! String
         
@@ -34,7 +35,7 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         let imageToShare:UIImage = UIImage(data: imageData! as Data)!
         
         // set up activity view controller
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: [imageToShare, text], applicationActivities: nil)
         
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
