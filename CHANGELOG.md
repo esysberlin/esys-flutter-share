@@ -17,7 +17,3 @@
 ## 0.0.5
 
 * Use FileProvider subclass to avoid collisions
-
-## 0.0.6
-
-* fixing crashes on iPad
