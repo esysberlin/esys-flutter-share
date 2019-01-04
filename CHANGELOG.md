@@ -21,3 +21,7 @@
 ## 0.0.6
 
 * fixes crashes on iPad
+
+## 0.0.7
+
+* update compileSdkVersion to 28 and com.android.support:support-v4 to 28.0.0
