@@ -9,6 +9,7 @@ import android.support.v4.content.FileProvider;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -41,6 +42,8 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
             shareImage(call.arguments);
         } else if (call.method.equals("shareText")) {
             shareText(call.arguments);
+        } else if(call.method.equals("shareImages")) {
+            shareImages(call.arguments);
         } else {
             result.notImplemented();
         }
@@ -74,6 +77,33 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
+        activeContext.startActivity(Intent.createChooser(shareIntent, title));
+    }
+
+    private void shareImages(Object arguments) {
+
+        HashMap<ArrayList<String>, ArrayList<String>> argsMap = (HashMap<ArrayList<String>, ArrayList<String>>) arguments;
+
+        ArrayList<String> fileNames = (ArrayList<String>) argsMap.get("fileNames");
+        ArrayList<String> titles = (ArrayList<String>) argsMap.get("title");
+
+
+        Context activeContext = _registrar.activeContext();
+
+        String title = titles.get(0);
+        ArrayList<Uri> contentUris = new ArrayList<Uri>();
+
+        for(String fileName: fileNames) {
+            File imageFile = new File(activeContext.getCacheDir(), fileName);
+            String fileProviderAuthority = activeContext.getPackageName() + ".fileprovider.github.com/orgs/esysberlin/esys-flutter-share";
+            Uri contentUri = FileProvider.getUriForFile(activeContext, fileProviderAuthority, imageFile);
+            contentUris.add(contentUri);
+        }
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        shareIntent.setType("image/*");
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, contentUris);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, title);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
     }
 }

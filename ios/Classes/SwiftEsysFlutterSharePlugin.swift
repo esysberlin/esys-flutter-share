@@ -14,6 +14,8 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             self.shareImage(arguments: call.arguments)
         } else if(call.method == "shareText"){
             self.shareText(arguments: call.arguments)
+        } else if(call.method == "shareImages"){
+            self.shareImages(arguments: call.arguments)
         } else {
             result(FlutterMethodNotImplemented)
         }
@@ -36,6 +38,39 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         // set up activity view controller
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
         
+        // present the view controller
+        let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
+        activityViewController.popoverPresentationController?.sourceView = controller.view
+
+        controller.show(activityViewController, sender: self)
+    }
+
+    func shareImages(arguments:Any?) -> Void {
+        // prepare method channel args
+        let argsMap = arguments as! NSDictionary
+
+        let fileNames:Array<String> = argsMap.value(forKey: "fileNames") as! Array<String>
+
+        var imageList:Array<UIImage> = []
+
+        for fileName in fileNames {
+            let docsPath:String = NSSearchPathForDirectoriesInDomains(.cachesDirectory,.userDomainMask , true).first!;
+            let imagePath = NSURL(fileURLWithPath: docsPath).appendingPathComponent(fileName)
+            let imageData:NSData? = NSData(contentsOf: imagePath!)
+            let imageToShare:UIImage = UIImage(data: imageData! as Data)!
+            imageList.append(imageToShare)
+        }
+
+        // let fileName:String = argsMap.value(forKey: "fileName") as! String
+
+        // no use in ios
+        //let title:String = argsMap.value(forKey: "title") as! String
+
+        // load the iage
+
+        // set up activity view controller
+        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: imageList, applicationActivities: nil)
+
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
         activityViewController.popoverPresentationController?.sourceView = controller.view

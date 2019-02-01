@@ -33,4 +33,25 @@ class EsysFlutterShare {
 
     _channel.invokeMethod('shareImage', argsMap);
   }
+
+  static Future shareImages(
+      List<String> fileNames, List<ByteData> imageBytes, String droidTitle) async {
+    Map argsMap = <String, List<String>>{
+      'fileNames': fileNames,
+      'title': [droidTitle]
+    };
+
+    int position = 0;
+
+    for(var imageByte in imageBytes) {
+      var fileName = fileNames[position];
+      Uint8List list = imageByte.buffer.asUint8List();
+      var tempDir = await getTemporaryDirectory();
+      var file = await new File('${tempDir.path}/$fileName').create();
+      await file.writeAsBytes(list);
+      position = position+1;
+    }
+
+    _channel.invokeMethod('shareImages', argsMap);
+  }
 }
