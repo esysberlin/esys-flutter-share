@@ -25,3 +25,7 @@
 ## 0.0.7
 
 * update compileSdkVersion to 28 and com.android.support:support-v4 to 28.0.0
+
+## 0.0.8
+
+* update path_provider to v0.5.0
