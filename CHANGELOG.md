@@ -29,3 +29,7 @@
 ## 0.0.8
 
 * update path_provider to v0.5.0
+
+## 0.0.9
+
+* Breaking change. Migrate from the deprecated original Android Support Library to AndroidX. This shouldn't result in any functional changes, but it requires   any Android apps using this plugin to [also migrate](https://developer.android.com/jetpack/androidx/migrate) if they're using the original support library.
