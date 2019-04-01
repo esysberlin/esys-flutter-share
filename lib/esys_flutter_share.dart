@@ -9,46 +9,48 @@ class Share {
   static const MethodChannel _channel = const MethodChannel(
       'channel:github.com/orgs/esysberlin/esys-flutter-share');
 
-  static Future text(String text, String mimeType) {
-    Map argsMap = <String, String>{'text': '$text', 'mimeType': '$mimeType'};
+  /// Sends a text to other apps.
+  static void text(String title, String text, String mimeType) {
+    Map argsMap = <String, String>{
+      'title': '$title',
+      'text': '$text',
+      'mimeType': '$mimeType'
+    };
     _channel.invokeMethod('text', argsMap);
   }
 
-  static Future file(String filePath, String mimeType) {
+  /// Sends a file to other apps.
+  static Future<void> file(
+      String title, String name, List<int> bytes, String mimeType) async {
     Map argsMap = <String, String>{
-      'filePath': '$filePath',
+      'title': '$title',
+      'name': '$name',
       'mimeType': '$mimeType'
     };
+
+    final tempDir = await getTemporaryDirectory();
+    final file = await new File('${tempDir.path}/$name').create();
+    await file.writeAsBytes(bytes);
+
     _channel.invokeMethod('file', argsMap);
   }
 
-  static Future files(List<Uri> filePaths, String mimeType) {
-    Map argsMap = <String, dynamic>{'filePath': filePaths, 'mimeType': mimeType};
-    _channel.invokeMethod('files', argsMap);
-  }
-
-  /// Shares text with other supported applications on Android and iOS.
-  /// The title parameter is just supported on Android and does nothing on iOS.
-  static Future shareText(String text, String droidTitle) async {
-    Map argsMap = <String, String>{'text': '$text', 'title': '$droidTitle'};
-    _channel.invokeMethod('shareText', argsMap);
-  }
-
-  /// Shares images with other supported applications on Android and iOS.
-  /// The title parameter is just supported on Android and does nothing on iOS.
-  static Future shareImage(
-      String fileName, ByteData imageBytes, String droidTitle) async {
-    Map argsMap = <String, String>{
-      'fileName': '$fileName',
-      'title': '$droidTitle'
+  /// Sends multiple files to other apps.
+  static Future<void> files(
+      String title, Map<String, List<int>> files, String mimeType) async {
+    Map argsMap = <String, dynamic>{
+      'title': '$title',
+      'names': files.entries.toList().map((x) => x.key).toList(),
+      'mimeType': mimeType
     };
 
-    final Uint8List list = imageBytes.buffer.asUint8List();
-
     final tempDir = await getTemporaryDirectory();
-    final file = await new File('${tempDir.path}/$fileName').create();
-    await file.writeAsBytes(list);
 
-    _channel.invokeMethod('shareImage', argsMap);
+    for (var entry in files.entries) {
+      final file = await new File('${tempDir.path}/${entry.key}').create();
+      await file.writeAsBytes(entry.value);
+    }
+
+    _channel.invokeMethod('files', argsMap);
   }
 }

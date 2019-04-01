@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
-import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(MaterialApp(
       home: MaterialApp(
@@ -37,48 +34,84 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text('Share image'),
                   onPressed: () async => await _shareImage(),
                 ),
+                MaterialButton(
+                  child: Text('Share images'),
+                  onPressed: () async => await _shareImages(),
+                ),
+                MaterialButton(
+                  child: Text('Share CSV'),
+                  onPressed: () async => await _shareCSV(),
+                ),
+                MaterialButton(
+                  child: Text('Share mixed'),
+                  onPressed: () async => await _shareMixed(),
+                ),
               ],
             )));
   }
 
   Future _shareText() async {
     try {
-      await Share.shareText(
-          'This is my text to share with other applications.', 'my text title');
+      Share.text('my text title',
+          'This is my text to share with other applications.', 'text/plain');
     } catch (e) {
       print('error: $e');
     }
   }
 
   Future _shareImage() async {
-    final ByteData bytes = await rootBundle.load('assets/image.png');
-    String path = await _localPath + '/image.png';
-    await writeBytes(bytes.buffer.asUint8List(), path);
-    print(await readBytes(path));
-    await Share.file(path, 'image/png');
-  }
-
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<File> writeBytes(List<int> bytes, String path) async {
-    var file = File('$path');
-    return await file.writeAsBytes(bytes);
-  }
-
-  Future<List<int>> readBytes(String path) async {
     try {
-      final file = File(path);
-
-      // Read the file
-      List<int> contents = await file.readAsBytes();
-
-      return contents;
+      final ByteData bytes = await rootBundle.load('assets/image1.png');
+      await Share.file(
+          'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png');
     } catch (e) {
-      // If encountering an error, return 0
-      return List();
+      print('error: $e');
+    }
+  }
+
+  Future _shareImages() async {
+    try {
+      final ByteData bytes1 = await rootBundle.load('assets/image1.png');
+      final ByteData bytes2 = await rootBundle.load('assets/image2.png');
+
+      await Share.files(
+          'esys images',
+          {
+            'esys.png': bytes1.buffer.asUint8List(),
+            'bluedan.png': bytes2.buffer.asUint8List(),
+          },
+          'image/png');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future _shareCSV() async {
+    try {
+      final ByteData bytes = await rootBundle.load('assets/addresses.csv');
+      await Share.file(
+          'addresses', 'addresses.csv', bytes.buffer.asUint8List(), 'text/csv');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future _shareMixed() async {
+    try {
+      final ByteData bytes1 = await rootBundle.load('assets/image1.png');
+      final ByteData bytes2 = await rootBundle.load('assets/image2.png');
+      final ByteData bytes3 = await rootBundle.load('assets/addresses.csv');
+
+      await Share.files(
+          'esys images',
+          {
+            'esys.png': bytes1.buffer.asUint8List(),
+            'bluedan.png': bytes2.buffer.asUint8List(),
+            'addresses.csv': bytes3.buffer.asUint8List(),
+          },
+          '*/*');
+    } catch (e) {
+      print('error: $e');
     }
   }
 }
