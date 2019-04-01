@@ -35,13 +35,34 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
 
     @Override
     public void onMethodCall(MethodCall call, Result result) {
-        if (call.method.equals("shareImage")) {
-            shareImage(call.arguments);
-        } else if (call.method.equals("shareText")) {
-            shareText(call.arguments);
-        } else {
-            result.notImplemented();
+
+        if(call.method.equals("file")){
+            file(call.arguments);
         }
+
+//        if (call.method.equals("shareImage")) {
+//            shareImage(call.arguments);
+//        } else if (call.method.equals("shareText")) {
+//            shareText(call.arguments);
+//        } else {
+//            result.notImplemented();
+//        }
+    }
+
+    private void file(Object arguments) {
+
+        HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
+        String filePath = (String) argsMap.get("filePath");
+        String mimeType = (String) argsMap.get("mimeType");
+
+
+        Context activeContext = _registrar.activeContext();
+        //String fileProviderAuthority = activeContext.getPackageName() + ".fileprovider.github.com/orgs/esysberlin/esys-flutter-share";
+       // Uri contentUri = FileProvider.getUriForFile(activeContext, fileProviderAuthority, new File(filePath));
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType(mimeType);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + filePath));
+        activeContext.startActivity(Intent.createChooser(shareIntent, ""));
     }
 
      private void shareImage(Object arguments) {

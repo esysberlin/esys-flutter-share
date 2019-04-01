@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(MaterialApp(
       home: MaterialApp(
@@ -40,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future _shareText() async {
     try {
-      await EsysFlutterShare.shareText(
+      await Share.shareText(
           'This is my text to share with other applications.', 'my text title');
     } catch (e) {
       print('error: $e');
@@ -48,12 +51,34 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future _shareImage() async {
+    final ByteData bytes = await rootBundle.load('assets/image.png');
+    String path = await _localPath + '/image.png';
+    await writeBytes(bytes.buffer.asUint8List(), path);
+    print(await readBytes(path));
+    await Share.file(path, 'image/png');
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> writeBytes(List<int> bytes, String path) async {
+    var file = File('$path');
+    return await file.writeAsBytes(bytes);
+  }
+
+  Future<List<int>> readBytes(String path) async {
     try {
-      final ByteData bytes = await rootBundle.load('assets/image.png');
-      await EsysFlutterShare.shareImage(
-          'myImageTest.png', bytes, 'my image title');
+      final file = File(path);
+
+      // Read the file
+      List<int> contents = await file.readAsBytes();
+
+      return contents;
     } catch (e) {
-      print('error: $e');
+      // If encountering an error, return 0
+      return List();
     }
   }
 }

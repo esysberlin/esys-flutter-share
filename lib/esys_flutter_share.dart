@@ -5,9 +5,27 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
-class EsysFlutterShare {
+class Share {
   static const MethodChannel _channel = const MethodChannel(
       'channel:github.com/orgs/esysberlin/esys-flutter-share');
+
+  static Future text(String text, String mimeType) {
+    Map argsMap = <String, String>{'text': '$text', 'mimeType': '$mimeType'};
+    _channel.invokeMethod('text', argsMap);
+  }
+
+  static Future file(String filePath, String mimeType) {
+    Map argsMap = <String, String>{
+      'filePath': '$filePath',
+      'mimeType': '$mimeType'
+    };
+    _channel.invokeMethod('file', argsMap);
+  }
+
+  static Future files(List<Uri> filePaths, String mimeType) {
+    Map argsMap = <String, dynamic>{'filePath': filePaths, 'mimeType': mimeType};
+    _channel.invokeMethod('files', argsMap);
+  }
 
   /// Shares text with other supported applications on Android and iOS.
   /// The title parameter is just supported on Android and does nothing on iOS.
