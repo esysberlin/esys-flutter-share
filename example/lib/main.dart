@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text('Share mixed'),
                   onPressed: () async => await _shareMixed(),
                 ),
-                 MaterialButton(
+                MaterialButton(
                   child: Text('Share image from url'),
                   onPressed: () async => await _shareImageFromUrl(),
                 ),
@@ -129,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
           'https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
       var response = await request.close();
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
-      await Share.file('esys image', 'esys.png', bytes, 'image/jpg');
+      await Share.file('ESYS AMLOG', 'amlog.jpg', bytes, 'image/jpg');
     } catch (e) {
       print('error: $e');
     }
