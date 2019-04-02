@@ -94,7 +94,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
 
         ArrayList<Uri> contentUris = new ArrayList<>();
 
-        for(String name : names) {
+        for (String name : names) {
             File file = new File(activeContext.getCacheDir(), name);
             String fileProviderAuthority = activeContext.getPackageName() + PROVIDER_AUTH_EXT;
             contentUris.add(FileProvider.getUriForFile(activeContext, fileProviderAuthority, file));
