@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
@@ -45,6 +49,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 MaterialButton(
                   child: Text('Share mixed'),
                   onPressed: () async => await _shareMixed(),
+                ),
+                 MaterialButton(
+                  child: Text('Share image from url'),
+                  onPressed: () async => await _shareImageFromUrl(),
                 ),
               ],
             )));
@@ -110,6 +118,18 @@ class _MyHomePageState extends State<MyHomePage> {
             'addresses.csv': bytes3.buffer.asUint8List(),
           },
           '*/*');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future _shareImageFromUrl() async {
+    try {
+      var request = await HttpClient().getUrl(Uri.parse(
+          'https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
+      var response = await request.close();
+      Uint8List bytes = await consolidateHttpClientResponseBytes(response);
+      await Share.file('esys image', 'esys.png', bytes, 'image/jpg');
     } catch (e) {
       print('error: $e');
     }
