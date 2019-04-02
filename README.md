@@ -28,14 +28,16 @@ Share files:
 ```dart
 final ByteData bytes1 = await rootBundle.load('assets/image1.png');
 final ByteData bytes2 = await rootBundle.load('assets/image2.png');
+final ByteData bytes3 = await rootBundle.load('assets/addresses.csv');
 
 await Share.files(
     'esys images',
     {
         'esys.png': bytes1.buffer.asUint8List(),
         'bluedan.png': bytes2.buffer.asUint8List(),
+        'addresses.csv': bytes3.buffer.asUint8List(),
     },
-    'image/png');
+    '*/*');
 ```
 
 Share file from url:
