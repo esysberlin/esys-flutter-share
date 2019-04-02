@@ -11,7 +11,7 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if(call.method == "text"){
-             self.text(arguments: call.arguments)
+            self.text(arguments: call.arguments)
         }
         if(call.method == "file"){
             self.file(arguments: call.arguments)
@@ -55,7 +55,7 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
         activityViewController.popoverPresentationController?.sourceView = controller.view
-
+        
         controller.show(activityViewController, sender: self)
     }
     
