@@ -1,6 +1,6 @@
 # esys_flutter_share
 
-A [Flutter](https://flutter.io) plugin for sharing images & text with other applications.
+A [Flutter](https://flutter.io) plugin for sharing files & text with other applications.
 
 ## Usage
 
