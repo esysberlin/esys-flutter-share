@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Update readme
+
 ## 1.0.0
 
 * Breaking change. Adds support for sharing single and multiple files.
