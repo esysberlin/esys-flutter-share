@@ -54,14 +54,14 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         @SuppressWarnings("unchecked")
         HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
         String title = argsMap.get("title");
-        String textToSend = argsMap.get("text");
+        String text = argsMap.get("text");
         String mimeType = argsMap.get("mimeType");
 
         Context activeContext = _registrar.activeContext();
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType(mimeType);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
     }
 
@@ -71,6 +71,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         String title = argsMap.get("title");
         String name = argsMap.get("name");
         String mimeType = argsMap.get("mimeType");
+        String text = argsMap.get("text");
 
         Context activeContext = _registrar.activeContext();
 
@@ -80,6 +81,8 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         String fileProviderAuthority = activeContext.getPackageName() + PROVIDER_AUTH_EXT;
         Uri contentUri = FileProvider.getUriForFile(activeContext, fileProviderAuthority, file);
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        // add optional text
+        if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
     }
 
@@ -91,6 +94,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         @SuppressWarnings("unchecked")
         ArrayList<String> names = (ArrayList<String>) argsMap.get("names");
         String mimeType = (String) argsMap.get("mimeType");
+        String text = (String) argsMap.get("text");
 
         Context activeContext = _registrar.activeContext();
 
@@ -106,6 +110,8 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         }
 
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, contentUris);
+        // add optional text
+        if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
     }
 }

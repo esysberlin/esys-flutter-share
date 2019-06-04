@@ -44,13 +44,21 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         //// let title:String = argsMap.value(forKey: "title") as! String
         let argsMap = arguments as! NSDictionary
         let name:String = argsMap.value(forKey: "name") as! String
+        let text:String = argsMap.value(forKey: "text") as! String
         
         // load the file
         let docsPath:String = NSSearchPathForDirectoriesInDomains(.cachesDirectory,.userDomainMask , true).first!;
         let contentUri = NSURL(fileURLWithPath: docsPath).appendingPathComponent(name)
         
+        // prepare sctivity items
+        var activityItems:[Any] = [contentUri!];
+        if(!text.isEmpty){
+            // add optional text
+            activityItems.append(text);
+        }
+        
         // set up activity view controller
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: [contentUri!], applicationActivities: nil)
+        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
@@ -65,17 +73,24 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         //// let title:String = argsMap.value(forKey: "title") as! String
         let argsMap = arguments as! NSDictionary
         let names:[String] = argsMap.value(forKey: "names") as! [String]
+        let text:String = argsMap.value(forKey: "text") as! String
         
-        var contentUris:[URL] = [];
+        // prepare sctivity items
+        var activityItems:[Any] = [];
         
         // load the files
         for name in names {
             let docsPath:String = NSSearchPathForDirectoriesInDomains(.cachesDirectory,.userDomainMask , true).first!;
-            contentUris.append(NSURL(fileURLWithPath: docsPath).appendingPathComponent(name)!);
+            activityItems.append(NSURL(fileURLWithPath: docsPath).appendingPathComponent(name)!);
+        }
+        
+        if(!text.isEmpty){
+            // add optional text
+            activityItems.append(text);
         }
         
         // set up activity view controller
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: contentUris, applicationActivities: nil)
+        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
