@@ -22,7 +22,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  */
 public class EsysFlutterSharePlugin implements MethodCallHandler {
 
-    final String PROVIDER_AUTH_EXT = ".fileprovider.github.com/orgs/esysberlin/esys-flutter-share";
+    private final String PROVIDER_AUTH_EXT = ".fileprovider.github.com/orgs/esysberlin/esys-flutter-share";
     private Registrar _registrar;
 
     private EsysFlutterSharePlugin(Registrar registrar) {
@@ -51,6 +51,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
     }
 
     private void text(Object arguments) {
+        @SuppressWarnings("unchecked")
         HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
         String title = argsMap.get("title");
         String textToSend = argsMap.get("text");
@@ -65,6 +66,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
     }
 
     private void file(Object arguments) {
+        @SuppressWarnings("unchecked")
         HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
         String title = argsMap.get("title");
         String name = argsMap.get("name");
@@ -82,8 +84,11 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
     }
 
     private void files(Object arguments) {
+        @SuppressWarnings("unchecked")
         HashMap<String, Object> argsMap = (HashMap<String, Object>) arguments;
         String title = (String) argsMap.get("title");
+
+        @SuppressWarnings("unchecked")
         ArrayList<String> names = (ArrayList<String>) argsMap.get("names");
         String mimeType = (String) argsMap.get("mimeType");
 

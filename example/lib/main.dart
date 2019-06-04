@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -58,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )));
   }
 
-  Future _shareText() async {
+  Future<void> _shareText() async {
     try {
       Share.text('my text title',
           'This is my text to share with other applications.', 'text/plain');
@@ -67,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future _shareImage() async {
+  Future<void> _shareImage() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/image1.png');
       await Share.file(
@@ -77,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future _shareImages() async {
+  Future<void> _shareImages() async {
     try {
       final ByteData bytes1 = await rootBundle.load('assets/image1.png');
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
@@ -94,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future _shareCSV() async {
+  Future<void> _shareCSV() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/addresses.csv');
       await Share.file(
@@ -104,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future _shareMixed() async {
+  Future<void> _shareMixed() async {
     try {
       final ByteData bytes1 = await rootBundle.load('assets/image1.png');
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
@@ -123,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future _shareImageFromUrl() async {
+  Future<void> _shareImageFromUrl() async {
     try {
       var request = await HttpClient().getUrl(Uri.parse(
           'https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
