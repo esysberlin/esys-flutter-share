@@ -46,7 +46,7 @@ Share file:
 
 ```dart
 final ByteData bytes = await rootBundle.load('assets/image1.png');
-await Share.file('esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png');
+await Share.file('esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png', text: 'My optional text.');
 ```
 
 Share files:
@@ -63,7 +63,8 @@ await Share.files(
         'bluedan.png': bytes2.buffer.asUint8List(),
         'addresses.csv': bytes3.buffer.asUint8List(),
     },
-    '*/*');
+    '*/*',
+    text: 'My optional text.');
 ```
 
 Share file from url:
