@@ -25,7 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Esys Share Plugin Sample'),
+          title: Text('Share Example'),
         ),
         body: Container(
             padding: const EdgeInsets.all(20.0),
