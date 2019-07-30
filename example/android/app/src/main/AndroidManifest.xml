@@ -14,7 +14,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="esys_flutter_share_example"
+        android:label="ShareExample"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

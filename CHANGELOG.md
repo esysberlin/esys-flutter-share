@@ -1,3 +1,7 @@
+## 1.0.3
+
+* update example app
+
 ## 1.0.2
 
 * update path_provider to 1.1.0
