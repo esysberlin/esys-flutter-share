@@ -24,7 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Esys Share Plugin Sample'),
+          title: Text('Share Example'),
         ),
         body: Container(
             padding: const EdgeInsets.all(20.0),
@@ -53,6 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 MaterialButton(
                   child: Text('Share image from url'),
                   onPressed: () async => await _shareImageFromUrl(),
+                ),
+                MaterialButton(
+                  child: Text('Share sound'),
+                  onPressed: () async => await _shareSound(),
                 ),
               ],
             )));
@@ -131,6 +135,16 @@ class _MyHomePageState extends State<MyHomePage> {
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
       await Share.file(
           'ESYS AMLOG', 'text to share with', 'amlog.jpg', bytes, 'image/jpg');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future<void> _shareSound() async {
+    try {
+      final ByteData bytes = await rootBundle.load('assets/cat.mp3');
+      await Share.file(
+          'Sound', 'cat.mp3', bytes.buffer.asUint8List(), 'audio/*');
     } catch (e) {
       print('error: $e');
     }

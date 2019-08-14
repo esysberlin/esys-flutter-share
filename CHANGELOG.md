@@ -1,3 +1,13 @@
+## 1.0.3
+
+* update example app
+
+## 1.0.2
+
+* update path_provider to 1.1.0
+* optional text share added to Share.file & Share.files methods
+* suppression of warnings "unchecked" in java code
+
 ## 1.0.1
 
 * Update readme
