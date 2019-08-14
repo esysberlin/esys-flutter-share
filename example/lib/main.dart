@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -59,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )));
   }
 
-  Future<void> _shareText() async {
+  Future _shareText() async {
     try {
       Share.text('my text title',
           'This is my text to share with other applications.', 'text/plain');
@@ -68,17 +67,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<void> _shareImage() async {
+  Future _shareImage() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/image1.png');
-      await Share.file(
-          'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png', text: 'My optional text.');
+      await Share.file('esys image', 'text to share with', 'esys.png',
+          bytes.buffer.asUint8List(), 'image/png');
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _shareImages() async {
+  Future _shareImages() async {
     try {
       final ByteData bytes1 = await rootBundle.load('assets/image1.png');
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
@@ -95,17 +94,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<void> _shareCSV() async {
+  Future _shareCSV() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/addresses.csv');
-      await Share.file(
-          'addresses', 'addresses.csv', bytes.buffer.asUint8List(), 'text/csv');
+      await Share.file('addresses', 'text to share with', 'addresses.csv',
+          bytes.buffer.asUint8List(), 'text/csv');
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _shareMixed() async {
+  Future _shareMixed() async {
     try {
       final ByteData bytes1 = await rootBundle.load('assets/image1.png');
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
@@ -118,19 +117,20 @@ class _MyHomePageState extends State<MyHomePage> {
             'bluedan.png': bytes2.buffer.asUint8List(),
             'addresses.csv': bytes3.buffer.asUint8List(),
           },
-          '*/*', text: 'My optional text.');
+          '*/*');
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _shareImageFromUrl() async {
+  Future _shareImageFromUrl() async {
     try {
       var request = await HttpClient().getUrl(Uri.parse(
           'https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
       var response = await request.close();
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
-      await Share.file('ESYS AMLOG', 'amlog.jpg', bytes, 'image/jpg');
+      await Share.file(
+          'ESYS AMLOG', 'text to share with', 'amlog.jpg', bytes, 'image/jpg');
     } catch (e) {
       print('error: $e');
     }
