@@ -4,6 +4,7 @@
 Pod::Spec.new do |s|
   s.name             = 'esys_flutter_share'
   s.version          = '0.0.1'
+  s.swift_version    = '4.0'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
