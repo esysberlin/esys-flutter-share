@@ -1,6 +1,7 @@
 ## 1.0.3
 
 * update example app
+* Fix swift version bug in Podfile
 
 ## 1.0.2
 
