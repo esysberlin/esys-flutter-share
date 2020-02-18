@@ -28,7 +28,7 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         let argsMap = arguments as! NSDictionary
         let text:String = argsMap.value(forKey: "text") as! String
         
-        setupAndShow(activityItems, argsMap)
+        setupAndShow(activityItems: [text], argsMap: argsMap)
     }
     
     func file(arguments:Any?) -> Void {
@@ -49,15 +49,14 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             // add optional text
             activityItems.append(text);
         }
-        
-        setupAndShow(activityItems, argsMap)
+        setupAndShow(activityItems: activityItems, argsMap: argsMap)
     }
     
     func files(arguments:Any?) -> Void {
         // prepare method channel args
         // no use in ios
         //// let title:String = argsMap.value(forKey: "title") as! String
-        let argsMap = arguments as! Dictionary
+        let argsMap = arguments as! NSDictionary
         let names:[String] = argsMap.value(forKey: "names") as! [String]
         let text:String = argsMap.value(forKey: "text") as! String
         
@@ -74,27 +73,31 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             // add optional text
             activityItems.append(text);
         }
-        setupAndShow(activityItems, argsMap)
+        setupAndShow(activityItems: activityItems, argsMap: argsMap)
        
     }
 
-    private func setupAndShow(_ activityItems: [Any], arguments: Dictionary) {
-        let text:String = argsMap.value(forKey: "originX") as? NSNumber
-        let text:String = argsMap.value(forKey: "originY") as? NSNumber
-        let text:String = argsMap.value(forKey: "originWidth") as? NSNumber
-        let text:String = argsMap.value(forKey: "originHeight") as? NSNumber
+    private func setupAndShow(activityItems: [Any], argsMap: NSDictionary) {
+      
 
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
         if let popover = activityViewController.popoverPresentationController {
             popover.sourceView = controller.view
             let bounds = controller.view.bounds
-            if (originX != nil && originY != nil && originWidth != nil && originHeight != nil) {
-                popover.sourceRect = CGRectMake([originX doubleValue], [originY doubleValue],
-                                        [originWidth doubleValue], [originHeight doubleValue]);
-            } else
-                    popover.sourceRect = CGRect(x: bounds.width - 96, y: 20, width: 48, height: 48)
+            
+            if (UIDevice.current.userInterfaceIdiom == .pad) {
+                let originX:NSNumber = argsMap.value(forKey: "originX") as? NSNumber ?? NSNumber(value: Float((bounds.width - 96)))
+                let originY:NSNumber = argsMap.value(forKey: "originY") as? NSNumber ?? 20
+                let originWidth:NSNumber = argsMap.value(forKey: "originWidth") as? NSNumber ?? 48
+                let originHeight:NSNumber = argsMap.value(forKey: "originHeight") as? NSNumber ?? 48
+            
+                popover.sourceRect = CGRect(x:originX.doubleValue,
+                                            y:originY.doubleValue,
+                                            width:originWidth.doubleValue,
+                                            height:originHeight.doubleValue);
             }
-        controller.show(activityViewController, sender: self)
+            controller.show(activityViewController, sender: self)
+        }
     }
 }

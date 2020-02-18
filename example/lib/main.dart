@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _shareText(BuildContext context) async {
     try {
       Share.text('my text title',
-          'This is my text to share with other applications.', 'text/plain');
+          'This is my text to share with other applications.', 'text/plain',  sharePositionOrigin: rect(context),);
     } catch (e) {
       print('error: $e');
     }
