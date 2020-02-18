@@ -28,14 +28,7 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         let argsMap = arguments as! NSDictionary
         let text:String = argsMap.value(forKey: "text") as! String
         
-        // set up activity view controller
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-        
-        // present the view controller
-        let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
-        
-        controller.show(activityViewController, sender: self)
+        setupAndShow(activityItems, argsMap)
     }
     
     func file(arguments:Any?) -> Void {
@@ -57,21 +50,14 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             activityItems.append(text);
         }
         
-        // set up activity view controller
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        
-        // present the view controller
-        let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
-        
-        controller.show(activityViewController, sender: self)
+        setupAndShow(activityItems, argsMap)
     }
     
     func files(arguments:Any?) -> Void {
         // prepare method channel args
         // no use in ios
         //// let title:String = argsMap.value(forKey: "title") as! String
-        let argsMap = arguments as! NSDictionary
+        let argsMap = arguments as! Dictionary
         let names:[String] = argsMap.value(forKey: "names") as! [String]
         let text:String = argsMap.value(forKey: "text") as! String
         
@@ -88,14 +74,27 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             // add optional text
             activityItems.append(text);
         }
-        
-        // set up activity view controller
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        
-        // present the view controller
+        setupAndShow(activityItems, argsMap)
+       
+    }
+
+    private func setupAndShow(_ activityItems: [Any], arguments: Dictionary) {
+        let text:String = argsMap.value(forKey: "originX") as? NSNumber
+        let text:String = argsMap.value(forKey: "originY") as? NSNumber
+        let text:String = argsMap.value(forKey: "originWidth") as? NSNumber
+        let text:String = argsMap.value(forKey: "originHeight") as? NSNumber
+
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
-        
+        if let popover = activityViewController.popoverPresentationController {
+            popover.sourceView = controller.view
+            let bounds = controller.view.bounds
+            if (originX != nil && originY != nil && originWidth != nil && originHeight != nil) {
+                popover.sourceRect = CGRectMake([originX doubleValue], [originY doubleValue],
+                                        [originWidth doubleValue], [originHeight doubleValue]);
+            } else
+                    popover.sourceRect = CGRect(x: bounds.width - 96, y: 20, width: 48, height: 48)
+            }
         controller.show(activityViewController, sender: self)
     }
 }
