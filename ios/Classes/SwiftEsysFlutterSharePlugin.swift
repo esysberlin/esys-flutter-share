@@ -87,10 +87,17 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             let bounds = controller.view.bounds
             
             if (UIDevice.current.userInterfaceIdiom == .pad) {
-                let originX:NSNumber = argsMap.value(forKey: "originX") as? NSNumber ?? NSNumber(value: Float((bounds.width - 96)))
-                let originY:NSNumber = argsMap.value(forKey: "originY") as? NSNumber ?? 20
-                let originWidth:NSNumber = argsMap.value(forKey: "originWidth") as? NSNumber ?? 48
-                let originHeight:NSNumber = argsMap.value(forKey: "originHeight") as? NSNumber ?? 48
+                let originX:NSNumber = argsMap.value(forKey: "originX") as? NSNumber ?? NSNumber(value: Float(bounds.midX))
+                let originY:NSNumber = argsMap.value(forKey: "originY") as? NSNumber ?? NSNumber(value: Float(bounds.midY))
+                var originWidth:NSNumber = argsMap.value(forKey: "originWidth") as? NSNumber ?? 0
+                var originHeight:NSNumber = argsMap.value(forKey: "originHeight") as? NSNumber ?? 0
+                
+                if (originWidth.intValue > (bounds.width - 96 as NSNumber).intValue) {
+                    originWidth = NSNumber(value: Float((bounds.width - 96)))
+                }
+                if (originHeight.intValue > (bounds.height - 96 as NSNumber).intValue) {
+                    originHeight = NSNumber(value: Float((bounds.height - 96)))
+                }
             
                 popover.sourceRect = CGRect(x:originX.doubleValue,
                                             y:originY.doubleValue,

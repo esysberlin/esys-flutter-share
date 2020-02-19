@@ -27,54 +27,75 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text('Share Example'),
         ),
-        body: Container(
-            padding: const EdgeInsets.all(20.0),
-            child: ListView(
-              children: <Widget>[
-                Builder(
-                  builder: (BuildContext context) => MaterialButton(
-                    child: Text('Share text'),
-                    onPressed: () async => await _shareText(context),
-                  ),
-                ),
-                Builder(
-                  builder: (BuildContext context) => MaterialButton(
-                    child: Text('Share image'),
-                    onPressed: () async => await _shareImage(context),
-                  ),
-                ),
-                Builder(
-                  builder: (BuildContext context) => MaterialButton(
-                    child: Text('Share images'),
-                    onPressed: () async => await _shareImages(context),
-                  ),
-                ),
-                Builder(
-                  builder: (BuildContext context) => MaterialButton(
-                    child: Text('Share CSV'),
-                    onPressed: () async => await _shareCSV(context),
-                  ),
-                ),
-                Builder(
-                  builder: (BuildContext context) => MaterialButton(
-                    child: Text('Share mixed'),
-                    onPressed: () async => await _shareMixed(context),
-                  ),
-                ),
-                Builder(
-                  builder: (BuildContext context) => MaterialButton(
-                    child: Text('Share image from url'),
-                    onPressed: () async => await _shareImageFromUrl(context),
-                  ),
-                ),
-                Builder(
-                  builder: (BuildContext context) => MaterialButton(
-                    child: Text('Share sound'),
-                    onPressed: () async => await _shareSound(context),
-                  ),
-                ),
-              ],
-            )));
+        floatingActionButton: Builder(
+                  builder: (BuildContext context) => IconButton(icon: Icon(Icons.file_download), onPressed: () => _shareImage(context),)),
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child:
+                Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ListView(
+                      children: <Widget>[
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share text'),
+                            onPressed: () async => await _shareText(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share image'),
+                            onPressed: () async => await _shareImage(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share images'),
+                            onPressed: () async => await _shareImages(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share CSV'),
+                            onPressed: () async => await _shareCSV(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share mixed'),
+                            onPressed: () async => await _shareMixed(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share image from url'),
+                            onPressed: () async => await _shareImageFromUrl(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share sound'),
+                            onPressed: () async => await _shareSound(context),
+                          ),
+                        ),
+                        MaterialButton(
+                            child: Text('Share not bounded'),
+                            onPressed: () async => await _shareImageNotBounded(),
+                          ),
+                        MaterialButton(
+                            child: Text('Share bounded to window'),
+                            onPressed: () async => await _shareImage(context),
+                          ),
+                          
+                      ],
+                    )),
+            ),
+
+                    Positioned(child: Builder(
+                  builder: (BuildContext context) => IconButton(icon: Icon(Icons.file_download), onPressed: () => _shareImage(context),)), bottom: 0, left: 0)
+          ],
+        ));
   }
 
   Rect rect(BuildContext context) {
@@ -97,6 +118,17 @@ class _MyHomePageState extends State<MyHomePage> {
       await Share.file(
           'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
           text: 'My optional text.', sharePositionOrigin: rect(context));
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future<void> _shareImageNotBounded() async {
+    try {
+      final ByteData bytes = await rootBundle.load('assets/image1.png');
+      await Share.file(
+          'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
+          text: 'My optional text.');
     } catch (e) {
       print('error: $e');
     }
