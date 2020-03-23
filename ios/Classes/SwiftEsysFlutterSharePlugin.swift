@@ -20,6 +20,32 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             self.files(arguments: call.arguments)
         }
     }
+
+    func argsContainRect(argsMap:NSDictionary) -> Bool {
+        if (argsMap.value(forKey: "originX") == nil ||
+            argsMap.value(forKey: "originY") == nil ||
+            argsMap.value(forKey: "originWidth") == nil ||
+            argsMap.value(forKey: "originHeight") == nil) {
+            return false;
+        }
+        return true;
+    }
+
+    func parseRectParam(strArg:String) -> CGFloat {
+        if let numArg = NumberFormatter().number(from: strArg) {
+            return CGFloat(truncating: numArg)
+        }
+        return 0
+    }
+
+    func getRectFromArgs(argsMap:NSDictionary) -> CGRect {
+        let originX:CGFloat = parseRectParam(strArg: argsMap.value(forKey: "originX") as! String)
+        let originY:CGFloat = parseRectParam(strArg: argsMap.value(forKey: "originY") as! String)
+        let originWidth:CGFloat = parseRectParam(strArg: argsMap.value(forKey: "originWidth") as! String)
+        let originHeight:CGFloat = parseRectParam(strArg: argsMap.value(forKey: "originHeight") as! String)
+        let originRect = CGRect(x: originX, y: originY, width: originWidth, height: originHeight);
+        return originRect;
+    }
     
     func text(arguments:Any?) -> Void {
         // prepare method channel args
@@ -34,6 +60,9 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
         activityViewController.popoverPresentationController?.sourceView = controller.view
+        if (argsMap != nil && self.argsContainRect(argsMap: argsMap)) {
+            activityViewController.popoverPresentationController?.sourceRect = self.getRectFromArgs(argsMap: argsMap)
+        }
         
         controller.show(activityViewController, sender: self)
     }
@@ -63,6 +92,9 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
         activityViewController.popoverPresentationController?.sourceView = controller.view
+        if (argsMap != nil && self.argsContainRect(argsMap: argsMap)) {
+            activityViewController.popoverPresentationController?.sourceRect = self.getRectFromArgs(argsMap: argsMap)
+        }
         
         controller.show(activityViewController, sender: self)
     }
@@ -95,6 +127,9 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         // present the view controller
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
         activityViewController.popoverPresentationController?.sourceView = controller.view
+        if (argsMap != nil && self.argsContainRect(argsMap: argsMap)) {
+            activityViewController.popoverPresentationController?.sourceRect = self.getRectFromArgs(argsMap: argsMap)
+        }
         
         controller.show(activityViewController, sender: self)
     }
