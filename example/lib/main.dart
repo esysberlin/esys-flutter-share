@@ -27,52 +27,103 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text('Share Example'),
         ),
-        body: Container(
-            padding: const EdgeInsets.all(20.0),
-            child: ListView(
-              children: <Widget>[
-                MaterialButton(
-                  child: Text('Share text'),
-                  onPressed: () async => await _shareText(),
-                ),
-                MaterialButton(
-                  child: Text('Share image'),
-                  onPressed: () async => await _shareImage(),
-                ),
-                MaterialButton(
-                  child: Text('Share images'),
-                  onPressed: () async => await _shareImages(),
-                ),
-                MaterialButton(
-                  child: Text('Share CSV'),
-                  onPressed: () async => await _shareCSV(),
-                ),
-                MaterialButton(
-                  child: Text('Share mixed'),
-                  onPressed: () async => await _shareMixed(),
-                ),
-                MaterialButton(
-                  child: Text('Share image from url'),
-                  onPressed: () async => await _shareImageFromUrl(),
-                ),
-                MaterialButton(
-                  child: Text('Share sound'),
-                  onPressed: () async => await _shareSound(),
-                ),
-              ],
-            )));
+        floatingActionButton: Builder(
+                  builder: (BuildContext context) => IconButton(icon: Icon(Icons.file_download), onPressed: () => _shareImage(context),)),
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child:
+                Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ListView(
+                      children: <Widget>[
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share text'),
+                            onPressed: () async => await _shareText(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share image'),
+                            onPressed: () async => await _shareImage(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share images'),
+                            onPressed: () async => await _shareImages(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share CSV'),
+                            onPressed: () async => await _shareCSV(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share mixed'),
+                            onPressed: () async => await _shareMixed(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share image from url'),
+                            onPressed: () async => await _shareImageFromUrl(context),
+                          ),
+                        ),
+                        Builder(
+                          builder: (BuildContext context) => MaterialButton(
+                            child: Text('Share sound'),
+                            onPressed: () async => await _shareSound(context),
+                          ),
+                        ),
+                        MaterialButton(
+                            child: Text('Share not bounded'),
+                            onPressed: () async => await _shareImageNotBounded(),
+                          ),
+                        MaterialButton(
+                            child: Text('Share bounded to window'),
+                            onPressed: () async => await _shareImage(context),
+                          ),
+                          
+                      ],
+                    )),
+            ),
+
+                    Positioned(child: Builder(
+                  builder: (BuildContext context) => IconButton(icon: Icon(Icons.file_download), onPressed: () => _shareImage(context),)), bottom: 0, left: 0)
+          ],
+        ));
   }
 
-  Future<void> _shareText() async {
+  Rect rect(BuildContext context) {
+    final RenderBox box = context.findRenderObject();
+    return box.localToGlobal(Offset.zero) & box.size;
+  }
+
+  Future<void> _shareText(BuildContext context) async {
     try {
       Share.text('my text title',
-          'This is my text to share with other applications.', 'text/plain');
+          'This is my text to share with other applications.', 'text/plain',  sharePositionOrigin: rect(context),);
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _shareImage() async {
+  Future<void> _shareImage(BuildContext context) async {
+    try {
+      final ByteData bytes = await rootBundle.load('assets/image1.png');
+      await Share.file(
+          'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
+          text: 'My optional text.', sharePositionOrigin: rect(context));
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future<void> _shareImageNotBounded() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/image1.png');
       await Share.file(
@@ -83,70 +134,90 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<void> _shareImages() async {
+  Future<void> _shareImages(BuildContext context) async {
     try {
       final ByteData bytes1 = await rootBundle.load('assets/image1.png');
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
 
       await Share.files(
-          'esys images',
-          {
-            'esys.png': bytes1.buffer.asUint8List(),
-            'bluedan.png': bytes2.buffer.asUint8List(),
-          },
-          'image/png');
+        'esys images',
+        {
+          'esys.png': bytes1.buffer.asUint8List(),
+          'bluedan.png': bytes2.buffer.asUint8List(),
+        },
+        'image/png',
+        sharePositionOrigin: rect(context),
+      );
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _shareCSV() async {
+  Future<void> _shareCSV(BuildContext context) async {
     try {
       final ByteData bytes = await rootBundle.load('assets/addresses.csv');
       await Share.file(
-          'addresses', 'addresses.csv', bytes.buffer.asUint8List(), 'text/csv');
+        'addresses',
+        'addresses.csv',
+        bytes.buffer.asUint8List(),
+        'text/csv',
+        sharePositionOrigin: rect(context),
+      );
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _shareMixed() async {
+  Future<void> _shareMixed(BuildContext context) async {
     try {
       final ByteData bytes1 = await rootBundle.load('assets/image1.png');
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
       final ByteData bytes3 = await rootBundle.load('assets/addresses.csv');
 
       await Share.files(
-          'esys images',
-          {
-            'esys.png': bytes1.buffer.asUint8List(),
-            'bluedan.png': bytes2.buffer.asUint8List(),
-            'addresses.csv': bytes3.buffer.asUint8List(),
-          },
-          '*/*',
-          text: 'My optional text.');
+        'esys images',
+        {
+          'esys.png': bytes1.buffer.asUint8List(),
+          'bluedan.png': bytes2.buffer.asUint8List(),
+          'addresses.csv': bytes3.buffer.asUint8List(),
+        },
+        '*/*',
+        text: 'My optional text.',
+        sharePositionOrigin: rect(context),
+      );
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _shareImageFromUrl() async {
+  Future<void> _shareImageFromUrl(BuildContext context) async {
     try {
       var request = await HttpClient().getUrl(Uri.parse(
           'https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
       var response = await request.close();
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
-      await Share.file('ESYS AMLOG', 'amlog.jpg', bytes, 'image/jpg');
+      await Share.file(
+        'ESYS AMLOG',
+        'amlog.jpg',
+        bytes,
+        'image/jpg',
+        sharePositionOrigin: rect(context),
+      );
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _shareSound() async {
+  Future<void> _shareSound(BuildContext context) async {
     try {
       final ByteData bytes = await rootBundle.load('assets/cat.mp3');
       await Share.file(
-          'Sound', 'cat.mp3', bytes.buffer.asUint8List(), 'audio/*');
+        'Sound',
+        'cat.mp3',
+        bytes.buffer.asUint8List(),
+        'audio/*',
+        sharePositionOrigin: rect(context),
+      );
     } catch (e) {
       print('error: $e');
     }
