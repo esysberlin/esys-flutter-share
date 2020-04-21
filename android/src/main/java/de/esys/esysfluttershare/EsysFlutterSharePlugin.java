@@ -2,6 +2,8 @@ package de.esys.esysfluttershare;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.util.Log;
 
@@ -10,6 +12,7 @@ import androidx.core.content.FileProvider;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -83,7 +86,16 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         // add optional text
         if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-        activeContext.startActivity(Intent.createChooser(shareIntent, title));
+
+
+        Intent chooser = Intent.createChooser(shareIntent, title);
+        List<ResolveInfo> resInfoList = activeContext.getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            activeContext.grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        activeContext.startActivity(chooser);
     }
 
     private void files(Object arguments) {
@@ -112,6 +124,15 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, contentUris);
         // add optional text
         if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-        activeContext.startActivity(Intent.createChooser(shareIntent, title));
-    }
+
+        Intent chooser = Intent.createChooser(shareIntent, title);
+        List<ResolveInfo> resInfoList = activeContext.getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            for(Uri uri: contentUris){
+                activeContext.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+        }
+        activeContext.startActivity(chooser);    }
 }
