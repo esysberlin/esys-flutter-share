@@ -49,7 +49,18 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             // add optional text
             activityItems.append(text);
         }
-        setupAndShow(activityItems: activityItems, argsMap: argsMap)
+        if(UIDevice.current.userInterfaceIdiom == .pad){
+           setupAndShow(activityItems: activityItems, argsMap: argsMap)
+        } else {
+          // set up activity view controller
+          let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+
+          // present the view controller
+          let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
+          activityViewController.popoverPresentationController?.sourceView = controller.view
+          controller.show(activityViewController, sender: self)
+        }
+        
     }
     
     func files(arguments:Any?) -> Void {
@@ -73,8 +84,17 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
             // add optional text
             activityItems.append(text);
         }
-        setupAndShow(activityItems: activityItems, argsMap: argsMap)
-       
+        if(UIDevice.current.userInterfaceIdiom == .pad){
+           setupAndShow(activityItems: activityItems, argsMap: argsMap)
+        } else {
+          // set up activity view controller
+          let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+
+          // present the view controller
+          let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
+          activityViewController.popoverPresentationController?.sourceView = controller.view
+          controller.show(activityViewController, sender: self)
+        }
     }
 
     private func setupAndShow(activityItems: [Any], argsMap: NSDictionary) {
