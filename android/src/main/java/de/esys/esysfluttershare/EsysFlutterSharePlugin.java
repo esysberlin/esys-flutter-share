@@ -62,6 +62,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType(mimeType);
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
     }
 
