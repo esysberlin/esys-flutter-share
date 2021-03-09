@@ -1,6 +1,6 @@
 ## 1.0.3
 
-* update example app
+* null safety
 
 ## 1.0.2
 
