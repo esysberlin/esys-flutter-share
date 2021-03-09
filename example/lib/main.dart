@@ -28,85 +28,96 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text('Share Example'),
         ),
         floatingActionButton: Builder(
-                  builder: (BuildContext context) => IconButton(icon: Icon(Icons.file_download), onPressed: () => _shareImage(context),)),
+            builder: (BuildContext context) => IconButton(
+                  icon: Icon(Icons.file_download),
+                  onPressed: () => _shareImage(context),
+                )),
         body: Stack(
           children: <Widget>[
             Positioned.fill(
-              child:
-                Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: ListView(
-                      children: <Widget>[
-                        Builder(
-                          builder: (BuildContext context) => MaterialButton(
-                            child: Text('Share text'),
-                            onPressed: () async => await _shareText(context),
-                          ),
+              child: Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ListView(
+                    children: <Widget>[
+                      Builder(
+                        builder: (BuildContext context) => MaterialButton(
+                          child: Text('Share text'),
+                          onPressed: () async => await _shareText(context),
                         ),
-                        Builder(
-                          builder: (BuildContext context) => MaterialButton(
-                            child: Text('Share image'),
-                            onPressed: () async => await _shareImage(context),
-                          ),
+                      ),
+                      Builder(
+                        builder: (BuildContext context) => MaterialButton(
+                          child: Text('Share image'),
+                          onPressed: () async => await _shareImage(context),
                         ),
-                        Builder(
-                          builder: (BuildContext context) => MaterialButton(
-                            child: Text('Share images'),
-                            onPressed: () async => await _shareImages(context),
-                          ),
+                      ),
+                      Builder(
+                        builder: (BuildContext context) => MaterialButton(
+                          child: Text('Share images'),
+                          onPressed: () async => await _shareImages(context),
                         ),
-                        Builder(
-                          builder: (BuildContext context) => MaterialButton(
-                            child: Text('Share CSV'),
-                            onPressed: () async => await _shareCSV(context),
-                          ),
+                      ),
+                      Builder(
+                        builder: (BuildContext context) => MaterialButton(
+                          child: Text('Share CSV'),
+                          onPressed: () async => await _shareCSV(context),
                         ),
-                        Builder(
-                          builder: (BuildContext context) => MaterialButton(
-                            child: Text('Share mixed'),
-                            onPressed: () async => await _shareMixed(context),
-                          ),
+                      ),
+                      Builder(
+                        builder: (BuildContext context) => MaterialButton(
+                          child: Text('Share mixed'),
+                          onPressed: () async => await _shareMixed(context),
                         ),
-                        Builder(
-                          builder: (BuildContext context) => MaterialButton(
-                            child: Text('Share image from url'),
-                            onPressed: () async => await _shareImageFromUrl(context),
-                          ),
+                      ),
+                      Builder(
+                        builder: (BuildContext context) => MaterialButton(
+                          child: Text('Share image from url'),
+                          onPressed: () async =>
+                              await _shareImageFromUrl(context),
                         ),
-                        Builder(
-                          builder: (BuildContext context) => MaterialButton(
-                            child: Text('Share sound'),
-                            onPressed: () async => await _shareSound(context),
-                          ),
+                      ),
+                      Builder(
+                        builder: (BuildContext context) => MaterialButton(
+                          child: Text('Share sound'),
+                          onPressed: () async => await _shareSound(context),
                         ),
-                        MaterialButton(
-                            child: Text('Share not bounded'),
-                            onPressed: () async => await _shareImageNotBounded(),
-                          ),
-                        MaterialButton(
-                            child: Text('Share bounded to window'),
-                            onPressed: () async => await _shareImage(context),
-                          ),
-                          
-                      ],
-                    )),
+                      ),
+                      MaterialButton(
+                        child: Text('Share not bounded'),
+                        onPressed: () async => await _shareImageNotBounded(),
+                      ),
+                      MaterialButton(
+                        child: Text('Share bounded to window'),
+                        onPressed: () async => await _shareImage(context),
+                      ),
+                    ],
+                  )),
             ),
-
-                    Positioned(child: Builder(
-                  builder: (BuildContext context) => IconButton(icon: Icon(Icons.file_download), onPressed: () => _shareImage(context),)), bottom: 0, left: 0)
+            Positioned(
+                child: Builder(
+                    builder: (BuildContext context) => IconButton(
+                          icon: Icon(Icons.file_download),
+                          onPressed: () => _shareImage(context),
+                        )),
+                bottom: 0,
+                left: 0)
           ],
         ));
   }
 
   Rect rect(BuildContext context) {
-    final RenderBox box = context.findRenderObject();
+    final RenderBox box = context.findRenderObject() as RenderBox;
     return box.localToGlobal(Offset.zero) & box.size;
   }
 
   Future<void> _shareText(BuildContext context) async {
     try {
-      Share.text('my text title',
-          'This is my text to share with other applications.', 'text/plain',  sharePositionOrigin: rect(context),);
+      Share.text(
+        'my text title',
+        'This is my text to share with other applications.',
+        'text/plain',
+        sharePositionOrigin: rect(context),
+      );
     } catch (e) {
       print('error: $e');
     }
