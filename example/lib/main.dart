@@ -74,9 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareImage() async {
     try {
-      final ByteData bytes = await rootBundle.load('assets/image1.png');
+      final ByteData? bytes = await rootBundle.load('assets/image1.png');
       await Share.file(
-          'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
+          'esys image', 'esys.png', bytes!.buffer.asUint8List(), 'image/png',
           text: 'My optional text.');
     } catch (e) {
       print('error: $e');
@@ -85,14 +85,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareImages() async {
     try {
-      final ByteData bytes1 = await rootBundle.load('assets/image1.png');
-      final ByteData bytes2 = await rootBundle.load('assets/image2.png');
+      final ByteData? bytes1 = await rootBundle.load('assets/image1.png');
+      final ByteData? bytes2 = await rootBundle.load('assets/image2.png');
 
       await Share.files(
           'esys images',
           {
-            'esys.png': bytes1.buffer.asUint8List(),
-            'bluedan.png': bytes2.buffer.asUint8List(),
+            'esys.png': bytes1!.buffer.asUint8List(),
+            'bluedan.png': bytes2!.buffer.asUint8List(),
           },
           'image/png');
     } catch (e) {
@@ -102,9 +102,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareCSV() async {
     try {
-      final ByteData bytes = await rootBundle.load('assets/addresses.csv');
+      final ByteData? bytes = await rootBundle.load('assets/addresses.csv');
       await Share.file(
-          'addresses', 'addresses.csv', bytes.buffer.asUint8List(), 'text/csv');
+          'addresses', 'addresses.csv', bytes!.buffer.asUint8List(), 'text/csv');
     } catch (e) {
       print('error: $e');
     }
@@ -112,16 +112,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareMixed() async {
     try {
-      final ByteData bytes1 = await rootBundle.load('assets/image1.png');
-      final ByteData bytes2 = await rootBundle.load('assets/image2.png');
-      final ByteData bytes3 = await rootBundle.load('assets/addresses.csv');
+      final ByteData? bytes1 = await rootBundle.load('assets/image1.png');
+      final ByteData? bytes2 = await rootBundle.load('assets/image2.png');
+      final ByteData? bytes3 = await rootBundle.load('assets/addresses.csv');
 
       await Share.files(
           'esys images',
           {
-            'esys.png': bytes1.buffer.asUint8List(),
-            'bluedan.png': bytes2.buffer.asUint8List(),
-            'addresses.csv': bytes3.buffer.asUint8List(),
+            'esys.png': bytes1!.buffer.asUint8List(),
+            'bluedan.png': bytes2!.buffer.asUint8List(),
+            'addresses.csv': bytes3!.buffer.asUint8List(),
           },
           '*/*',
           text: 'My optional text.');
@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
       var request = await HttpClient().getUrl(Uri.parse(
           'https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
       var response = await request.close();
-      Uint8List bytes = await consolidateHttpClientResponseBytes(response);
+      Uint8List? bytes = await consolidateHttpClientResponseBytes(response);
       await Share.file('ESYS AMLOG', 'amlog.jpg', bytes, 'image/jpg');
     } catch (e) {
       print('error: $e');
@@ -144,9 +144,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareSound() async {
     try {
-      final ByteData bytes = await rootBundle.load('assets/cat.mp3');
+      final ByteData? bytes = await rootBundle.load('assets/cat.mp3');
       await Share.file(
-          'Sound', 'cat.mp3', bytes.buffer.asUint8List(), 'audio/*');
+          'Sound', 'cat.mp3', bytes!.buffer.asUint8List(), 'audio/*');
     } catch (e) {
       print('error: $e');
     }
