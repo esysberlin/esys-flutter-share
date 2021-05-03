@@ -1,3 +1,8 @@
+## 2.0.0
+
+* migrate to null safety
+* update path_provider to 2.0.0
+
 ## 1.0.3
 
 * update example app
