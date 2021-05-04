@@ -65,8 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareText() async {
     try {
-      Share.text('my text title',
-          'This is my text to share with other applications.', 'text/plain');
+      Share.text(
+          'my text title', 'This is my text to share with other applications.', 'text/plain');
     } catch (e) {
       print('error: $e');
     }
@@ -75,8 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _shareImage() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/image1.png');
-      await Share.file(
-          'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
+      await Share.file('esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
           text: 'My optional text.');
     } catch (e) {
       print('error: $e');
@@ -103,8 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _shareCSV() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/addresses.csv');
-      await Share.file(
-          'addresses', 'addresses.csv', bytes.buffer.asUint8List(), 'text/csv');
+      await Share.file('addresses', 'addresses.csv', bytes.buffer.asUint8List(), 'text/csv');
     } catch (e) {
       print('error: $e');
     }
@@ -132,8 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareImageFromUrl() async {
     try {
-      var request = await HttpClient().getUrl(Uri.parse(
-          'https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
+      var request = await HttpClient().getUrl(
+          Uri.parse('https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
       var response = await request.close();
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
       await Share.file('ESYS AMLOG', 'amlog.jpg', bytes, 'image/jpg');
@@ -145,8 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _shareSound() async {
     try {
       final ByteData bytes = await rootBundle.load('assets/cat.mp3');
-      await Share.file(
-          'Sound', 'cat.mp3', bytes.buffer.asUint8List(), 'audio/*');
+      await Share.file('Sound', 'cat.mp3', bytes.buffer.asUint8List(), 'audio/*');
     } catch (e) {
       print('error: $e');
     }
