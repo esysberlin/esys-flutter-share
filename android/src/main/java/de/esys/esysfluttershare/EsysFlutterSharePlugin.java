@@ -62,6 +62,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType(mimeType);
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
     }
 
@@ -81,6 +82,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         String fileProviderAuthority = activeContext.getPackageName() + PROVIDER_AUTH_EXT;
         Uri contentUri = FileProvider.getUriForFile(activeContext, fileProviderAuthority, file);
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
         // add optional text
         if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
@@ -110,6 +112,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         }
 
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, contentUris);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
         // add optional text
         if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         activeContext.startActivity(Intent.createChooser(shareIntent, title));
