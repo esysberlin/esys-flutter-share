@@ -16,3 +16,5 @@ build/
 
 # Visual Studio Code related
 .vscode/
+flutter_export_environment.sh
+.flutter-plugins-dependencies
