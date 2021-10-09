@@ -2,6 +2,8 @@ package de.esys.esysfluttershare;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.core.content.FileProvider;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -66,6 +69,7 @@ public class EsysFlutterSharePlugin implements FlutterPlugin, MethodCallHandler 
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         Intent chooserIntent = Intent.createChooser(shareIntent, title);
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        chooserIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         activeContext.startActivity(chooserIntent);
     }
 
@@ -89,6 +93,8 @@ public class EsysFlutterSharePlugin implements FlutterPlugin, MethodCallHandler 
         if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         Intent chooserIntent = Intent.createChooser(shareIntent, title);
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        grantPermission(chooserIntent, contentUri);
         activeContext.startActivity(chooserIntent);
     }
 
@@ -106,24 +112,36 @@ public class EsysFlutterSharePlugin implements FlutterPlugin, MethodCallHandler 
         Context activeContext = binding.getApplicationContext();
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shareIntent.setType(mimeType);
 
         ArrayList<Uri> contentUris = new ArrayList<>();
 
-        for (String name : names) {
-            File file = new File(activeContext.getCacheDir(), name);
-            String fileProviderAuthority = activeContext.getPackageName() + PROVIDER_AUTH_EXT;
-            contentUris.add(FileProvider.getUriForFile(activeContext, fileProviderAuthority, file));
-        }
 
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, contentUris);
         // add optional text
         if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
 
         Intent chooserIntent = Intent.createChooser(shareIntent, title);
+
+        for (String name : names) {
+            File file = new File(activeContext.getCacheDir(), name);
+            String fileProviderAuthority = activeContext.getPackageName() + PROVIDER_AUTH_EXT;
+            Uri contentUri = FileProvider.getUriForFile(activeContext, fileProviderAuthority, file);
+            contentUris.add(contentUri);
+            grantPermission(chooserIntent, contentUri);
+        }
+
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         activeContext.startActivity(chooserIntent);
+    }
+
+    private void grantPermission(Intent intent, Uri uri){
+        Context context = binding.getApplicationContext();
+        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
     }
 }
