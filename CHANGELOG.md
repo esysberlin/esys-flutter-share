@@ -1,3 +1,7 @@
+## 2.0.1
+
+* migrate to V2
+
 ## 2.0.0
 
 * migrate to null safety
