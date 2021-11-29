@@ -113,18 +113,18 @@ public class EsysFlutterSharePlugin implements FlutterPlugin, MethodCallHandler 
 
         ArrayList<Uri> contentUris = new ArrayList<>();
 
-        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, contentUris);
-        // add optional text
-        if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-
-        Intent chooserIntent = Intent.createChooser(shareIntent, title);
-
         for (String name : names) {
             File file = new File(activeContext.getCacheDir(), name);
             String fileProviderAuthority = activeContext.getPackageName() + PROVIDER_AUTH_EXT;
             Uri contentUri = FileProvider.getUriForFile(activeContext, fileProviderAuthority, file);
             contentUris.add(contentUri);
         }
+
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, contentUris);
+        // add optional text
+        if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+
+        Intent chooserIntent = Intent.createChooser(shareIntent, title);
 
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
