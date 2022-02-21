@@ -1,4 +1,6 @@
-# esys_flutter_share
+# esys_flutter_share_plus
+
+It's fork of [esys_flutter_share](https://github.com/esysberlin/esys-flutter-share).
 
 A [Flutter](https://flutter.io) plugin for sharing files & text with other applications.
 
@@ -33,7 +35,7 @@ Instead, if you have already a non-swift project, you can check this issue to so
 Import:
 
 ```dart
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 ```
 
 Share text:
