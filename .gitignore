@@ -1,6 +1,6 @@
-# Flutter/Dart/Pub related
 .DS_Store
 .dart_tool/
+.idea/
 
 .packages
 .pub/
@@ -8,11 +8,18 @@ pubspec.lock
 
 build/
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# Visual Studio Code related
+# VSCode settings
 .vscode/
+
+android/.settings/
+android/.classpath
+android/.project
+example/android/.settings/
+example/android/.classpath
+example/android/.project
+example/android/app/.settings/
+example/android/app/.classpath
+example/android/app/.project
+
+# FVM
+.fvm/
