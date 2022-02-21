@@ -1,3 +1,8 @@
+## 2.1.0
+
+* Published as `esys_flutter_share_plus`.
+* `compileSdkVersion` upgraded to 31.
+
 ## 2.0.1
 
 * migrate to V2
