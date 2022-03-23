@@ -1,3 +1,17 @@
+## 2.1.0
+
+* Published as `esys_flutter_share_plus`.
+* `compileSdkVersion` upgraded to 31.
+
+## 2.0.1
+
+* migrate to V2
+
+## 2.0.0
+
+* migrate to null safety
+* update path_provider to 2.0.0
+
 ## 1.0.3
 
 * update example app
