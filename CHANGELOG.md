@@ -1,3 +1,7 @@
+## 2.1.1
+
+* Fixed bug by granting permission. So now granting permission for the uri for each resolvable application.
+
 ## 2.1.0
 
 * Published as `esys_flutter_share_plus`.
