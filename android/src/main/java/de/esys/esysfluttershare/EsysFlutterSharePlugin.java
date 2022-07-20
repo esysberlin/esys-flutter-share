@@ -93,6 +93,12 @@ public class EsysFlutterSharePlugin implements FlutterPlugin, MethodCallHandler 
         Intent chooserIntent = Intent.createChooser(shareIntent, title);
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+        List<ResolveInfo> resInfoList = activeContext.getPackageManager().queryIntentActivities(chooserIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            activeContext.grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
         activeContext.startActivity(chooserIntent);
     }
 
@@ -128,6 +134,14 @@ public class EsysFlutterSharePlugin implements FlutterPlugin, MethodCallHandler 
 
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+        List<ResolveInfo> resInfoList = activeContext.getPackageManager().queryIntentActivities(chooserIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            for(Uri uri: contentUris){
+                activeContext.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+        }
         activeContext.startActivity(chooserIntent);
     }
 }
