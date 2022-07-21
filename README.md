@@ -1,3 +1,7 @@
+ # Important Note
+ **We have decided to discontinue the development of this library to concentrate our efforts on other projects. You can use [share_plus](https://pub.dev/packages/share_plus) instead for example.**
+
+
 # esys_flutter_share
 
 A [Flutter](https://flutter.io) plugin for sharing files & text with other applications.
