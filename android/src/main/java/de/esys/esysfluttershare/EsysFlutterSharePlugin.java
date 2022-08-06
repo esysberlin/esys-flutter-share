@@ -2,43 +2,41 @@ package de.esys.esysfluttershare;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-/**
- * EsysFlutterSharePlugin
- */
-public class EsysFlutterSharePlugin implements MethodCallHandler {
+/** EsysfluttersharePlugin */
+public class EsysFlutterSharePlugin implements FlutterPlugin, MethodCallHandler {
 
     private final String PROVIDER_AUTH_EXT = ".fileprovider.github.com/orgs/esysberlin/esys-flutter-share";
-    private Registrar _registrar;
 
-    private EsysFlutterSharePlugin(Registrar registrar) {
-        this._registrar = registrar;
-    }
+    private MethodChannel channel;
+    private FlutterPluginBinding binding;
 
-    /**
-     * Plugin registration.
-     */
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "channel:github.com/orgs/esysberlin/esys-flutter-share");
-        channel.setMethodCallHandler(new EsysFlutterSharePlugin(registrar));
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "channel:github.com/orgs/esysberlin/esys-flutter-share");
+        binding = flutterPluginBinding;
+        channel.setMethodCallHandler(this);
     }
 
     @Override
-    public void onMethodCall(MethodCall call, Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (call.method.equals("text")) {
             text(call.arguments);
         }
@@ -50,6 +48,12 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         }
     }
 
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        channel.setMethodCallHandler(null);
+    }
+
+
     private void text(Object arguments) {
         @SuppressWarnings("unchecked")
         HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
@@ -57,12 +61,16 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         String text = argsMap.get("text");
         String mimeType = argsMap.get("mimeType");
 
-        Context activeContext = _registrar.activeContext();
+        Context activeContext = binding.getApplicationContext();
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
         shareIntent.setType(mimeType);
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-        activeContext.startActivity(Intent.createChooser(shareIntent, title));
+        Intent chooserIntent = Intent.createChooser(shareIntent, title);
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        chooserIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        activeContext.startActivity(chooserIntent);
     }
 
     private void file(Object arguments) {
@@ -73,7 +81,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         String mimeType = argsMap.get("mimeType");
         String text = argsMap.get("text");
 
-        Context activeContext = _registrar.activeContext();
+        Context activeContext = binding.getApplicationContext();
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType(mimeType);
@@ -83,8 +91,13 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         // add optional text
         if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-        activeContext.startActivity(Intent.createChooser(shareIntent, title));
+        Intent chooserIntent = Intent.createChooser(shareIntent, title);
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        grantPermission(chooserIntent, contentUri);
+        activeContext.startActivity(chooserIntent);
     }
+
 
     private void files(Object arguments) {
         @SuppressWarnings("unchecked")
@@ -96,22 +109,39 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         String mimeType = (String) argsMap.get("mimeType");
         String text = (String) argsMap.get("text");
 
-        Context activeContext = _registrar.activeContext();
+        Context activeContext = binding.getApplicationContext();
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         shareIntent.setType(mimeType);
 
         ArrayList<Uri> contentUris = new ArrayList<>();
 
-        for (String name : names) {
-            File file = new File(activeContext.getCacheDir(), name);
-            String fileProviderAuthority = activeContext.getPackageName() + PROVIDER_AUTH_EXT;
-            contentUris.add(FileProvider.getUriForFile(activeContext, fileProviderAuthority, file));
-        }
 
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, contentUris);
         // add optional text
         if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-        activeContext.startActivity(Intent.createChooser(shareIntent, title));
+
+        Intent chooserIntent = Intent.createChooser(shareIntent, title);
+
+        for (String name : names) {
+            File file = new File(activeContext.getCacheDir(), name);
+            String fileProviderAuthority = activeContext.getPackageName() + PROVIDER_AUTH_EXT;
+            Uri contentUri = FileProvider.getUriForFile(activeContext, fileProviderAuthority, file);
+            contentUris.add(contentUri);
+            grantPermission(chooserIntent, contentUri);
+        }
+
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        activeContext.startActivity(chooserIntent);
+    }
+
+    private void grantPermission(Intent intent, Uri uri){
+        Context context = binding.getApplicationContext();
+        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
     }
 }
