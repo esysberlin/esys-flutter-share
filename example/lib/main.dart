@@ -89,12 +89,13 @@ class _MyHomePageState extends State<MyHomePage> {
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
 
       await Share.files(
-          'esys images',
-          {
-            'esys.png': bytes1.buffer.asUint8List(),
-            'bluedan.png': bytes2.buffer.asUint8List(),
-          },
-          'image/png');
+        'esys images',
+        {
+          'esys.png': bytes1.buffer.asUint8List(),
+          'bluedan.png': bytes2.buffer.asUint8List(),
+        },
+        {'image/png'},
+      );
     } catch (e) {
       print('error: $e');
     }
@@ -123,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
             'bluedan.png': bytes2.buffer.asUint8List(),
             'addresses.csv': bytes3.buffer.asUint8List(),
           },
-          '*/*',
+          {'*/*'},
           text: 'My optional text.');
     } catch (e) {
       print('error: $e');

@@ -1,6 +1,6 @@
 name: esys_flutter_share_plus
 description: A Flutter plugin for sharing images & text with other applications. Fork by Innim
-version: 2.1.1
+version: 2.2.0
 homepage: https://github.com/Innim/esys-flutter-share
 repository: https://github.com/Innim/esys-flutter-share
 issue_tracker: https://github.com/Innim/esys-flutter-share/issues

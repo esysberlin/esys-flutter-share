@@ -1,3 +1,9 @@
+## 2.2.0
+
+* Fix share file with text. When the text with one file was not shown.
+* Detailed file type processing.
+* **Breaking change**. To `files()` you need to pass the `mimeType` array.
+
 ## 2.1.1
 
 * Fixed bug by granting permission. So now granting permission for the uri for each resolvable application.

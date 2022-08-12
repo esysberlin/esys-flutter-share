@@ -37,13 +37,24 @@ class Share {
   }
 
   /// Sends multiple files to other apps.
+  /// 
+  /// The optional `mimeTypes` parameter can be used to specify MIME types for
+  /// the provided files.
+  /// Android supports all natively available MIME types (wildcards like image/*
+  /// are also supported) and it's considered best practice to avoid mixing
+  /// unrelated file types (eg. image/jpg & application/pdf). If MIME types are
+  /// mixed the plugin attempts to find the lowest common denominator. Even
+  /// if MIME types are supplied the receiving app decides if those are used
+  /// or handled.
+  /// On iOS image/jpg, image/jpeg and image/png are handled as images, while
+  /// every other MIME type is considered a normal file.
   static Future<void> files(
-      String title, Map<String, List<int>> files, String mimeType,
+      String title, Map<String, List<int>> files, Set<String> mimeTypes,
       {String text = ''}) async {
     Map argsMap = <String, dynamic>{
       'title': '$title',
       'names': files.entries.toList().map((x) => x.key).toList(),
-      'mimeType': mimeType,
+      'mimeTypes': mimeTypes.toList(),
       'text': '$text'
     };
 
