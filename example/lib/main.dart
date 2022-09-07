@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Rect getSharePopoverLocation() {
+    return Rect.fromLTWH(MediaQuery.of(context).size.width - 100.0,
+        MediaQuery.of(context).size.height, 0.0, 0.0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,10 +69,17 @@ class _MyHomePageState extends State<MyHomePage> {
             )));
   }
 
+  Future<bool> _isIpad() async {
+    final iosInfo = await DeviceInfoPlugin().iosInfo;
+    return iosInfo.name.toLowerCase().contains('ipad');
+  }
+
   Future<void> _shareText() async {
     try {
+      final bool isIpad = await _isIpad();
       Share.text('my text title',
-          'This is my text to share with other applications.', 'text/plain');
+          'This is my text to share with other applications.', 'text/plain',
+          sharePositionOrigin: isIpad ? getSharePopoverLocation() : null);
     } catch (e) {
       print('error: $e');
     }
@@ -74,10 +87,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareImage() async {
     try {
+      final bool isIpad = await _isIpad();
       final ByteData bytes = await rootBundle.load('assets/image1.png');
       await Share.file(
           'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
-          text: 'My optional text.');
+          text: 'My optional text.',
+          sharePositionOrigin: isIpad ? getSharePopoverLocation() : null);
     } catch (e) {
       print('error: $e');
     }
@@ -85,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareImages() async {
     try {
+      final bool isIpad = await _isIpad();
       final ByteData bytes1 = await rootBundle.load('assets/image1.png');
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
 
@@ -94,7 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
             'esys.png': bytes1.buffer.asUint8List(),
             'bluedan.png': bytes2.buffer.asUint8List(),
           },
-          'image/png');
+          'image/png',
+          sharePositionOrigin: isIpad ? getSharePopoverLocation() : null);
     } catch (e) {
       print('error: $e');
     }
@@ -102,9 +119,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareCSV() async {
     try {
+      final bool isIpad = await _isIpad();
       final ByteData bytes = await rootBundle.load('assets/addresses.csv');
       await Share.file(
-          'addresses', 'addresses.csv', bytes.buffer.asUint8List(), 'text/csv');
+          'addresses', 'addresses.csv', bytes.buffer.asUint8List(), 'text/csv',
+          sharePositionOrigin: isIpad ? getSharePopoverLocation() : null);
     } catch (e) {
       print('error: $e');
     }
@@ -112,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareMixed() async {
     try {
+      final bool isIpad = await _isIpad();
       final ByteData bytes1 = await rootBundle.load('assets/image1.png');
       final ByteData bytes2 = await rootBundle.load('assets/image2.png');
       final ByteData bytes3 = await rootBundle.load('assets/addresses.csv');
@@ -124,7 +144,8 @@ class _MyHomePageState extends State<MyHomePage> {
             'addresses.csv': bytes3.buffer.asUint8List(),
           },
           '*/*',
-          text: 'My optional text.');
+          text: 'My optional text.',
+          sharePositionOrigin: isIpad ? getSharePopoverLocation() : null);
     } catch (e) {
       print('error: $e');
     }
@@ -132,11 +153,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareImageFromUrl() async {
     try {
+      final bool isIpad = await _isIpad();
       var request = await HttpClient().getUrl(Uri.parse(
           'https://shop.esys.eu/media/image/6f/8f/af/amlog_transport-berwachung.jpg'));
       var response = await request.close();
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
-      await Share.file('ESYS AMLOG', 'amlog.jpg', bytes, 'image/jpg');
+      await Share.file('ESYS AMLOG', 'amlog.jpg', bytes, 'image/jpg',
+          sharePositionOrigin: isIpad ? getSharePopoverLocation() : null);
     } catch (e) {
       print('error: $e');
     }
@@ -144,9 +167,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _shareSound() async {
     try {
+      final bool isIpad = await _isIpad();
       final ByteData bytes = await rootBundle.load('assets/cat.mp3');
       await Share.file(
-          'Sound', 'cat.mp3', bytes.buffer.asUint8List(), 'audio/*');
+          'Sound', 'cat.mp3', bytes.buffer.asUint8List(), 'audio/*',
+          sharePositionOrigin: isIpad ? getSharePopoverLocation() : null);
     } catch (e) {
       print('error: $e');
     }
