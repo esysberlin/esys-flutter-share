@@ -32,10 +32,10 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: [text], applicationActivities: nil)
         
         // present the view controller
-        let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
+        let controller = UIApplication.shared.keyWindow!.rootViewController
+        activityViewController.popoverPresentationController?.sourceView = controller?.view
         
-        controller.show(activityViewController, sender: self)
+        controller?.present(activityViewController, animated: true, completion: nil)
     }
     
     func file(arguments:Any?) -> Void {
@@ -61,10 +61,10 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         
         // present the view controller
-        let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
+        let controller = UIApplication.shared.keyWindow!.rootViewController
+        activityViewController.popoverPresentationController?.sourceView = controller?.view
         
-        controller.show(activityViewController, sender: self)
+        controller?.present(activityViewController, animated: true, completion: nil)
     }
     
     func files(arguments:Any?) -> Void {
@@ -93,9 +93,9 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         
         // present the view controller
-        let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
+        let controller = UIApplication.shared.keyWindow!.rootViewController
+				activityViewController.popoverPresentationController?.sourceView = controller?.view
         
-        controller.show(activityViewController, sender: self)
+        controller?.present(activityViewController, animated: true, completion: nil)
     }
 }
